@@ -1,0 +1,20 @@
+package: github.com/vinayvenkat/myootadapter
+import:
+- package: github.com/gogo/protobuf
+  subpackages:
+  - gogoproto
+  - proto
+- package: google.golang.org/grpc
+- package: istio.io/api
+  subpackages:
+  - mixer/adapter/model/v1beta1
+  - policy/v1beta1
+- package: istio.io/istio
+  subpackages:
+  - mixer/template/metric
+  - pkg/log
+- package: golang.org/x/sys
+  version: 95b1ffbd15a57cc5abb3f04402b9e8ec0016a52c
+  subpackages:
+  - unix
+  - windows

@@ -1,0 +1,101 @@
+# handler for adapter mygrpcadapter
+apiVersion: "config.istio.io/v1alpha2"
+kind: handler
+metadata:
+ name: h1
+ namespace: istio-system
+spec:
+ adapter: mygrpcadapter
+ connection:
+   address: "{ADDRESS}" #replaces at runtime by the test
+ params:
+   file_path: "out.txt"
+---
+
+# instance for template metric
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+ name: i1metric
+ namespace: istio-system
+spec:
+ template: metric
+ params:
+   value: request.size | 0
+   dimensions:
+     response_code: "200"
+---
+
+# rule to dispatch to handler h1
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+ name: r1
+ namespace: istio-system
+spec:
+ actions:
+ - handler: h1.istio-system
+   instances:
+   - i1metric
+---
+kind: handler
+metadata:
+ name: vvlogger 
+ namespace: istio-system
+spec:
+ adapter: mygrpcadapter
+ connection:
+         address: "mygrpcadapter:8000" #replaces at runtime by the test
+---
+# Rule to send logentry instances to the gRPC handler
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: newlogtogrpcadapter
+  namespace: istio-system
+spec:
+  match: "true" # match for all requests
+  actions:
+   - handler: vvlogger.istio-system 
+     instances:
+     - vvlogentry.logentry
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: logentry
+metadata:
+  name: vvlogentry 
+  namespace: istio-system
+spec:
+  severity: '"Info"'
+  timestamp: request.time
+  variables:
+    originIp: origin.ip | ip("0.0.0.0")
+    sourceIp: source.ip | ip("0.0.0.0")
+    sourceService: source.service | ""
+    sourceUser: source.user | source.uid | ""
+    sourceNamespace: source.namespace | ""
+    destinationIp: destination.ip | ip("0.0.0.0")
+    destinationService: destination.service | ""
+    destinationNamespace: destination.namespace | ""
+    apiName: api.service | ""
+    apiVersion: api.version | ""
+    apiClaims: request.headers["sec-istio-auth-userinfo"]| ""
+    apiKey: request.api_key | request.headers["x-api-key"] | ""
+    requestOperation: api.operation | ""
+    protocol: request.scheme | "http"
+    method: request.method | ""
+    url: request.path | ""
+    responseCode: response.code | 0
+    responseSize: response.size | 0
+    requestSize: request.size | 0
+    latency: response.duration | "0ms"
+    connectionMtls: connection.mtls | false
+    userAgent: request.useragent | ""
+    responseTimestamp: response.time
+    receivedBytes: request.total_size | connection.received.bytes | 0
+    sentBytes: response.total_size | connection.sent.bytes | 0
+    referer: request.referer | ""
+  # The Monitored Resource must match a Stackdriver Monitored resource type defined at:
+  #     https://cloud.google.com/monitoring/api/resources
+  # Sending invalid MRs will result in the entire metric entry being rejected.
+  monitoredResourceType: '"UNSPECIFIED"'

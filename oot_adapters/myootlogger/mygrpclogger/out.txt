@@ -1,0 +1,77 @@
+HandleMetric invoked with:
+  Adapter config: &Params{FilePath:out.txt,}
+  Instances: 
+HandleMetric invoked with:
+  Adapter config: &Params{FilePath:out.txt,}
+  Instances: 
+HandleLogEntry invoked with:
+  Adapter config: &Params{FilePath:out.txt,}
+  Instances: 'vvnewlog.instance.istio-system':
+  {
+        Timestamp = 2018-01-29T12:12:14Z
+        Severity = Default
+  }'responseSize' : '%!s(int64=0)'
+'url' : '/doug-test'
+'requestSize' : '%!s(int64=0)'
+'destinationIp' : '0.0.0.0'
+'responseCode' : '%!s(int64=0)'
+'protocol' : 'http'
+'sourceIp' : '0.0.0.0'
+'sourceUser' : ''
+'latency' : '0s'
+'method' : ''
+
+HandleLogEntry invoked with:
+  Adapter config: &Params{FilePath:out.txt,}
+  Instances: 'vvnewlog.instance.istio-system':
+  {
+        Timestamp = 2018-01-29T12:12:14Z
+        Severity = Default
+  }'latency' : '0s'
+'method' : ''
+'destinationIp' : '0.0.0.0'
+'responseSize' : '%!s(int64=2048)'
+'url' : '/doug-test'
+'responseCode' : '%!s(int64=200)'
+'sourceIp' : '0.0.0.0'
+'protocol' : 'http'
+'sourceUser' : ''
+'requestSize' : '%!s(int64=512)'
+
+HandleLogEntry invoked with:
+  Adapter config: &Params{FilePath:out.txt,}
+  Instances: 'vvnewlog.instance.istio-system':
+  {
+        Timestamp = 2018-01-29T12:12:14Z
+        Severity = Default
+  }'requestSize' : '512'
+'destinationIp' : '0.0.0.0'
+'responseCode' : '200'
+'method' : ''
+'latency' : '0s'
+'sourceUser' : ''
+'responseSize' : '2048'
+'protocol' : 'http'
+'url' : '/doug-test'
+'sourceIp' : '0.0.0.0'
+
+HandleLogEntry invoked with:
+  Adapter config: &Params{FilePath:out.txt,}
+  Instances: 'vvnewlog.instance.istio-system':
+  {
+        Timestamp = 2018-01-29T12:12:14Z
+        Severity = Default
+  }'destinationUid' : 'kubernetes://productpage-v1-79b8db5f94-dg4pw.crazy'
+'url' : '/doug-test'
+'destinationService' : 'test'
+'sourceUser' : ''
+'requestSize' : '512'
+'latency' : '0s'
+'protocol' : 'http'
+'destinationIp' : '0.0.0.0'
+'method' : ''
+'responseSize' : '2048'
+'sourceIp' : '0.0.0.0'
+'responseCode' : '200'
+'requestPath' : '/doug-test'
+

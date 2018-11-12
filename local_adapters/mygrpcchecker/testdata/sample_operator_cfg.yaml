@@ -1,0 +1,37 @@
+# handler for adapter mygrpcadapter
+apiVersion: "config.istio.io/v1alpha2"
+kind: handler 
+metadata:
+ name: h1
+ namespace: istio-system
+spec:
+ adapter: mygrpcchecker
+ connection:
+   address: "[::]:41149" #replaces at runtime by the test
+ params:
+   file_path: "out.txt"
+---
+# Configuration for listentry instances
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: vvnewlistentry
+  namespace: istio-system
+spec:
+  template: listentry
+  params:
+   value: source.labels["version"] | "http" 
+---
+# Rule to send logentry instances to the fluentd handler
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: r1 
+  namespace: istio-system
+spec:
+  match: "true" # match for all requests
+  actions:
+   - handler: h1
+     instances:
+     - vvnewlistentry
+---

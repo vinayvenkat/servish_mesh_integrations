@@ -131,24 +131,37 @@ func decodeValue(in interface{}) interface{} {
 
 func instances(in []*logentry.InstanceMsg) string {
     var b bytes.Buffer
+    fmt.Println("Start ++++++++++++++++++++++++++++++++++++++++")
+    fmt.Println("Start of current log output\n\n")
+    smap := make(map[string]interface{})
     for _, inst := range in {
         timeStamp := inst.Timestamp.Value.String()
         severity := inst.Severity
         fmt.Println("TimeStamp: ", timeStamp)
         fmt.Println("Severity: ", severity)
-        for k, v := range inst.Variables {
+        /* for k, v := range inst.Variables {
             fmt.Println(k, ": ", decodeValue(v.GetValue()))
         }
+		*/
 		b.WriteString(fmt.Sprintf("'%s':\n"+
             "  {\n"+
             "        Timestamp = %v\n"+
             "        Severity = %v\n"+
             "  }", inst.Name, inst.Timestamp.Value.String(),
 				   inst.Severity))
+
+		smap["Timestamp"] = string(timeStamp)
+
 		for k, v := range inst.Variables {
 			b.WriteString(fmt.Sprintf("'%s' : '%v'\n", k, decodeValue(v.GetValue())))
+            smap[k] = decodeValue(v.GetValue())
+		}
+		for key, value := range smap {
+			fmt.Println(key, "=", value)
 		}
     }
+    fmt.Println("Start ++++++++++++++++++++++++++++++++++++++++")
+    fmt.Println("Start of current log output\n\n")
     return b.String()
 }
 
